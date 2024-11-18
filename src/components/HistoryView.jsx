@@ -2,6 +2,19 @@ import propTypes from "prop-types";
 import "./HistoryView.css";
 
 function HistoryView({ setView }) {
+  const answers = JSON.parse(localStorage.getItem("diary")) || {};
+  const history = Object.entries(answers);
+
+  // Object.keys(answers).map((key) => {
+  //   const value = answers[key];
+  //   key, value;
+  //   return (
+  //     <div key={key}>
+  //       {key} : {value}
+  //     </div>
+  //   );
+  // });
+
   return (
     <>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -16,10 +29,14 @@ function HistoryView({ setView }) {
         </button>
         <h4>다이어리 기록</h4>
       </div>
-      <div className="diary-item">
-        <div className="diary-date">(날짜)</div>
-        <div>(내용)</div>
-      </div>
+      {history.map(([date, answer], index) => (
+        <div className="diary-item">
+          <div key={index} className="diary-date">
+            {date}일
+          </div>
+          <div> {answer}</div>
+        </div>
+      ))}
     </>
   );
 }
