@@ -3,13 +3,17 @@ import "./MainView.css";
 import { useEffect, useState } from "react";
 
 function MainView({ setView }) {
-  const [questions, setQuestions] = useState();
   const now = new Date();
 
   // 년/월/일 출력용
   const date = now.getDate();
   const month = now.getMonth() + 1;
   const year = now.getFullYear();
+
+  const answers = JSON.parse(localStorage.getItem("diary") || "{}");
+
+  const [questions, setQuestions] = useState();
+  const [input, setInput] = useState(answers[date]); // 날짜에 해당 되는 것이 없으면 빈 object에서 꺼내 쓰기 (없으니까 빈 문자열 반환)
 
   // 첫 렌더링 시 한번만 출력하기
   useEffect(() => {
@@ -48,8 +52,14 @@ function MainView({ setView }) {
       <div className="question">{questions[date]}</div>
       <div className="content">
         <textarea
-          onChange={() => {
-            console.log("onChange");
+          value={input}
+          onChange={(e) => {
+            const value = e.target.value;
+            setInput(value);
+            localStorage.setItem(
+              "diary",
+              JSON.stringify({ ...answers, [date]: value })
+            );
           }}
         />
       </div>
